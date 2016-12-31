@@ -1,0 +1,8 @@
+/.settings
+/Debug
+/binaries
+*.o
+*.elf
+*.bin
+*.map
+*.sym
