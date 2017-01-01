@@ -6,3 +6,5 @@
 *.bin
 *.map
 *.sym
+*.s19
+*.hex
