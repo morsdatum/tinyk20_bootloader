@@ -1,0 +1,1 @@
+GIT_VER := '"$(shell git --no-pager describe --tags --always --dirty)"'
