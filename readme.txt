@@ -1,7 +1,7 @@
 readme.txt
 ----------
 
-Bootloader for tinyK20 board with Kinetis Design Studio v3.0.0.
+Bootloader for tinyK20 board with KDS v3 and now eclipse compiled ok!
 
 Source files from
 https://github.com/mbedmicro/CMSIS-DAP
