@@ -27,6 +27,15 @@
 #elif defined(TARGET_MK20DX)
 #define SECTOR_SIZE       (0x400)
 #define NB_SECTOR         (128)
+
+#elif defined(TARGET_MK21DX)
+#define SECTOR_SIZE		(0x800)
+#define NB_SECTOR  		(128)
+
+#elif defined(TARGET_MK22DN)
+#define SECTOR_SIZE		(0x800)
+#define NB_SECTOR		(256)
+
 #endif
 
 #define END_FLASH         (NB_SECTOR*SECTOR_SIZE)
