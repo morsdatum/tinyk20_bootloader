@@ -625,6 +625,12 @@
 //    #include "device/MK24F25612/MK24F25612_vref.h"
 //    #include "device/MK24F25612/MK24F25612_wdog.h"
 
+#elif defined(CPU_MK21DX256AVLK5)
+	#include "device/MK21D5/MK21DA5.h"
+
+#elif defined(CPU_MK22DN512VLK5)
+	#include "device/MK22D5/MK22D5.h"
+
 #else
     #error "No valid CPU defined!"
 #endif

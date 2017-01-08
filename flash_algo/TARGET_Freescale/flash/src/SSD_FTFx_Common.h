@@ -80,6 +80,7 @@
 #define FLASH_BLOCK_BASE                   0x00
 
 #if defined(FTFA)
+  #if defined(TARGET_MK20DX)
     #define FTFx FTFA
     #define FTFx_BASE FTFA_BASE
 
@@ -96,7 +97,9 @@
 
     #define BM_FTFx_FSEC_SEC BM_FTFA_FSEC_SEC
     #define BM_FTFx_FSEC_KEYEN BM_FTFA_FSEC_KEYEN
+  #endif
 #elif defined(FTFE)
+  #if defined(TARGET_MK20DX)
     #define FTFx FTFE
     #define FTFx_BASE FTFE_BASE
 
@@ -113,7 +116,9 @@
 
     #define BM_FTFx_FSEC_SEC BM_FTFE_FSEC_SEC
     #define BM_FTFx_FSEC_KEYEN BM_FTFE_FSEC_KEYEN
+  #endif
 #elif defined(FTFL)
+  #if defined(TARGET_MK20DX)
     #define FTFx FTFL
     #define FTFx_BASE FTFL_BASE
 
@@ -130,8 +135,11 @@
 
     #define BM_FTFx_FSEC_SEC BM_FTFL_FSEC_SEC
     #define BM_FTFx_FSEC_KEYEN BM_FTFL_FSEC_KEYEN
+  #endif
 #else
+  #if !defined(TARGET_MK21DX) && !defined(TARGET_MK22DN)
     #error "Unknown flash controller"
+  #endif
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////

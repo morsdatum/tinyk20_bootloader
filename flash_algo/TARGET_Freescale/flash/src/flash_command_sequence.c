@@ -52,11 +52,16 @@ static void (*callFlashRunCommand)(FTFx_REG_ACCESS_TYPE);
 //! flashloader (RAM-resident bootloader).
 void flash_run_command(FTFx_REG_ACCESS_TYPE ftfx_fstat)
 {
+#if defined(TARGET_MK20DX)
     // clear CCIF bit
     *ftfx_fstat = BM_FTFx_FSTAT_CCIF;
 
     // check CCIF bit of the flash status register, wait till it is set
     while (!((*ftfx_fstat) & BM_FTFx_FSTAT_CCIF));
+#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+    *ftfx_fstat = FTFL_FSTAT_CIFF_MASK;
+    while(!((*ftfx_fstat) & FTFL_FSTAT_CCIF_MASK));
+#endif
 }
 
 //! @brief Be used for determining the size of flash_run_command()
@@ -101,7 +106,11 @@ void copy_flash_run_command(void)
 status_t flash_command_sequence(void)
 {
     // clear RDCOLERR & ACCERR & FPVIOL flag in flash status register
+#if defined(TARGET_MK20DX)
     HW_FTFx_FSTAT_WR(FTFx_BASE, BM_FTFx_FSTAT_RDCOLERR | BM_FTFx_FSTAT_ACCERR | BM_FTFx_FSTAT_FPVIOL);
+#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+    FTFL->FSTAT = (uint8_t)(FTFL_FSTAT_REDCOLERR_MASK | FTFL_FSTAT_ACCERR | FTFL_FSTAT_FPVIOL);
+#endif
 
 #if BL_TARGET_FLASH
     // We pass the ftfx_fstat address as a parameter to flash_run_comamnd() instead of using
@@ -109,17 +118,24 @@ status_t flash_command_sequence(void)
     // to make sure that flash_run_command() will be compiled into position-independent code (PIC).
     callFlashRunCommand((FTFx_REG_ACCESS_TYPE)(&HW_FTFx_FSTAT(FTFx_BASE)));
 #else
+	#if defined(TARGET_MK20DX)
     // clear CCIF bit
     HW_FTFx_FSTAT_WR(FTFx_BASE, BM_FTFx_FSTAT_CCIF);
 
     // check CCIF bit of the flash status register, wait till it is set
     while (!(HW_FTFx_FSTAT(FTFx_BASE).B.CCIF));
+	#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+    FTFL->FSTAT = (uint8_t)FTFL_FSTAT_CCIF_MASK;
+    while(!(FTFL->FSTAT & FTFL_FSTAT_CCIF_MASK));
+	#endif
 #endif
 
     // Check error bits
     // Get flash status register value
-    uint8_t registerValue = FTFx->FSTAT;
 
+	#if defined(TARGET_MK20DX)
+
+    uint8_t registerValue = FTFx->FSTAT;
     // checking access error
     if (registerValue & BM_FTFx_FSTAT_ACCERR)
     {
@@ -135,6 +151,16 @@ status_t flash_command_sequence(void)
     {
         return kStatus_FlashCommandFailure;
     }
+	#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+    uint8_t registerValue = FTFL->FSTAT;
+
+    if(registerValue & FTFL_FSTAT_ACCER_MASK)
+    	return kStatus_FlashAcccessError;
+    else if (registerValue & FTFL_FSTAT_FPVIOL_MASK)
+    	return kStatus_FlashProtectionViolation;
+    else if (registerValue & FTFL_FSTAT_MGSTAT0_MASK)
+    	return kStatus_FlashCommandFailure;
+	#endif
 
     return kStatus_Success;
 }

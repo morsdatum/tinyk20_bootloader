@@ -13,7 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#if defined(TARGET_MK20X)
 #include <MK20D5.h>
+#elif defined(TARGET_MK21DX)
+#include <MK21DA5.h>
+#elif defined(TARGET_MK22DN)
+#include <MK22D5.h>
+#endif
 #include "vector_table.h"
 #include "flash_hal.h"
 

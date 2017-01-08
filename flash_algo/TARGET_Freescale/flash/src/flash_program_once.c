@@ -54,8 +54,13 @@ status_t flash_program_once(flash_driver_t * driver, uint32_t index, uint32_t *s
     }
 
     // pass paramters to FTFx
+#if defined(TARGET_MK20DX)
     HW_FTFx_FCCOBx_WR(FTFx_BASE, 0, FTFx_PROGRAM_ONCE);
     HW_FTFx_FCCOBx_WR(FTFx_BASE, 1, index);
+#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+    FTFL->FCCOB0 = (uint8_t)FTFx_PROGRAM_ONCE;
+    FTFL->FCCOB1 = (uint8_t)index;
+#endif
     kFCCOBx[1] = *src;
 
     if (index > FLASH_PROGRAM_ONCE_MAX_ID_4BYTES)

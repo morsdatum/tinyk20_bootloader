@@ -51,10 +51,19 @@ status_t flash_get_security_state(flash_driver_t * driver, flash_security_state_
     uint8_t registerValue;
 
     // Get flash security register value
+#if defined(TARGET_MK20DX)
     registerValue = FTFx->FSEC;
+#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+    registerValue = FTFL->FSEC;
+#endif
+
 
     // check the status of the flash security bits in the security register
+#if defined(TARGET_MK20DX)
     if (FLASH_SECURITY_STATE_UNSECURED == (registerValue & BM_FTFx_FSEC_SEC))
+#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+    if (FLASH_SECURITY_STATE_UNSECURED == (registerValue & FTFL_FSEC_SEC_MASK))
+#endif
     {
         // Flash in unsecured state
         *state = kFlashNotSecure;
@@ -63,7 +72,11 @@ status_t flash_get_security_state(flash_driver_t * driver, flash_security_state_
     {
         // Flash in secured state
         // check for backdoor key security enable bit
+#if defined(TARGET_MK20DX)
         if (FLASH_SECURITY_STATE_KEYEN == (registerValue & BM_FTFx_FSEC_KEYEN))
+#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+        if (FLASH_SECURITY_STATE_KEYEN == (registerValue & FTFTL_FSEC_KEYEN_MASK))
+#endif
         {
             // Backdoor key security enabled
             *state = kFlashSecureBackdoorEnabled;

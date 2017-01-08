@@ -198,6 +198,9 @@
     #define FSL_FEATURE_FTFx_PBLOCK_COUNT    (2)
     #define FSL_FEATURE_FTFx_PSECTOR_SIZE    (4096)
 
+#elif defined(CPU_MK21DX256AVLK5) || defined(CPU_MK22DN512VLK5)
+	#define FSL_FEATURE_FTFx_REGION_COUNT (32)
+
 #else
     #error "No valid CPU defined"
 #endif

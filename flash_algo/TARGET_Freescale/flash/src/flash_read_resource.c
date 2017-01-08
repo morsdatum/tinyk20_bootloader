@@ -85,8 +85,13 @@ status_t flash_read_resource(flash_driver_t * driver, uint32_t start, uint32_t *
     {
         // preparing passing parameter
         kFCCOBx[0] = start;
+#if defined(TARGET_MK20DX)
         HW_FTFx_FCCOBx_WR(FTFx_BASE, 0, FTFx_READ_RESOURCE);
         HW_FTFx_FCCOBx_WR(FTFx_BASE, 8, option);
+#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+        FTFL->FCCOB0 = (uint8_t)FTFx_READ_RESOURCE;
+        FTFL->FCCOB8 = (uint8_t)option;
+#endif
 
         // calling flash command sequence function to execute the command
         returnCode = flash_command_sequence();

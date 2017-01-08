@@ -23,15 +23,23 @@
 
 #if defined(TARGET_LPC11U35)
 #include <LPC11Uxx.h>
-#elif defined(TARGET_MK20DX)
-#include <MK20D5.h>
-#endif
-
-#if defined(TARGET_LPC11U35)	
 #   define WANTED_SIZE_IN_KB  		(64)
 #elif defined(TARGET_MK20DX)
+#include <MK20D5.h>
 #   define WANTED_SIZE_IN_KB        (128)
+#elif defined(TARGET_MK21DX)
+#include <MK21DA5.h>
+#   define WANTED_SIZE_IN_KB        (256)
+#elif defined(TARGET_MK22DN)
+#include <MK22D5.h>
+#   define WANTED_SIZE_IN_KB        (512)
 #endif
+
+//#if defined(TARGET_LPC11U35)
+
+//#elif defined(TARGET_MK20DX)
+
+//#endif
 
 //------------------------------------------------------------------- CONSTANTS
 #define WANTED_SIZE_IN_BYTES        ((WANTED_SIZE_IN_KB + 16 + 8)*1024)
@@ -491,7 +499,7 @@ static void initDisconnect(uint8_t success) {
 static void disable_usb_irq(void){
 #if defined(TARGET_LPC11U35)
     NVIC_DisableIRQ(USB_IRQn);
-#elif defined(TARGET_MK20DX)
+#elif defined(TARGET_MK20DX) || defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
     NVIC_DisableIRQ(USB0_IRQn);
 #endif
 }
@@ -499,7 +507,7 @@ static void disable_usb_irq(void){
 static void enable_usb_irq(void){
 #if defined(TARGET_LPC11U35)
     NVIC_EnableIRQ(USB_IRQn);
-#elif defined(TARGET_MK20DX)
+#elif defined(TARGET_MK20DX) || defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
     NVIC_EnableIRQ(USB0_IRQn);
 #endif
 }

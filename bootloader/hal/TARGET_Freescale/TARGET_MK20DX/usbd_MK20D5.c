@@ -15,7 +15,13 @@
  */
 #include <RTL.h>
 #include <rl_usb.h>
+#if defined(TARGET_MK20DX)
 #include <MK20D5.h>
+#elif defined(TARGET_MK21DX)
+#include <MK21DA5.h>
+#elif defined(TARGET_MK22DN)
+#include <MK22D5.h>
+#endif
 
 #define __NO_USB_LIB_C
 #include "usb_config.c"

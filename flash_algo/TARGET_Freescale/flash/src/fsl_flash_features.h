@@ -5716,6 +5716,10 @@
     #define FSL_FEATURE_FLASH_PFLASH_SECTION_CMD_ADDRESS_ALIGMENT (4)
     /* @brief P-Flash Program check command address alignment. */
     #define FSL_FEATURE_FLASH_PFLASH_CHECK_CMD_ADDRESS_ALIGMENT (4)
+#elif defined(CPU_MK21DX256AVLK5)
+	#include "device/MK21D5/MK21DA5_features.h"
+#elif defined(CPU_MK22DN512VLK5)
+	#include "device/MK22D5/MK22D5_features.h"
 // -------------------------------------------------
 #else
     #error "No valid CPU defined!"

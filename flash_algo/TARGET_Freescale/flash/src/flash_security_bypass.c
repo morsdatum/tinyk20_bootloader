@@ -54,13 +54,18 @@ status_t flash_security_bypass(flash_driver_t * driver, const uint8_t * backdoor
     returnCode = kStatus_Success;
 
     //Get flash security register value
+#if defined(TARGET_MK20DX)
     registerValue = FTFx->FSEC;
+#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+    registerValue = FTFL->FSEC;
+#endif
 
     // Check to see if flash is in secure state (any state other than 0x2)
     // If not, then skip this since flash is not secure
     if (0x02 != (registerValue & 0x03))
     {
         // preparing passing parameter to erase a flash block
+#if defined(TARGET_MK20DX)
         HW_FTFx_FCCOBx_WR(FTFx_BASE, 0, FTFx_SECURITY_BY_PASS);
         HW_FTFx_FCCOBx_WR(FTFx_BASE, 4, backdoorKey[0]);
         HW_FTFx_FCCOBx_WR(FTFx_BASE, 5, backdoorKey[1]);
@@ -70,6 +75,17 @@ status_t flash_security_bypass(flash_driver_t * driver, const uint8_t * backdoor
         HW_FTFx_FCCOBx_WR(FTFx_BASE, 9, backdoorKey[5]);
         HW_FTFx_FCCOBx_WR(FTFx_BASE, A, backdoorKey[6]);
         HW_FTFx_FCCOBx_WR(FTFx_BASE, B, backdoorKey[7]);
+#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+        FTFL->FCCOB0 = (uint8_t)FTFx_SECURITY_BY_PASS;
+        FTFL->FCCOB4 = (uint8_t)backdoorkey[0];
+        FTFL->FCCOB5 = (uint8_t)backdoorkey[1];
+        FTFL->FCCOB6 = (uint8_t)backdoorkey[2];
+        FTFL->FCCOB7 = (uint8_t)backdoorkey[3];
+        FTFL->FCCOB8 = (uint8_t)backdoorkey[4];
+        FTFL->FCCOB9 = (uint8_t)backdoorkey[5];
+        FTFL->FCCOBA = (uint8_t)backdoorkey[6];
+        FTFL->FCCOBB = (uint8_t)backdoorkey[7];
+#endif
 
         // calling flash command sequence function to execute the command
         returnCode = flash_command_sequence();

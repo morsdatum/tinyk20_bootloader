@@ -46,8 +46,13 @@ status_t flash_verify_erase_all(flash_driver_t * driver, flash_margin_value_t ma
     }
 
     // preparing passing parameter to verify all block command
+#if defined(TARGET_MK20DX)
     HW_FTFx_FCCOBx_WR(FTFx_BASE, 0, FTFx_VERIFY_ALL_BLOCK);
     HW_FTFx_FCCOBx_WR(FTFx_BASE, 1, margin);
+#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+    FTFL->FCCOB0 = (uint8_t)FTFx_VERIFY_ALL_BLOCK;
+    FTFL->FCCOB1 = (uint8_t)margin;
+#endif
 
     // calling flash command sequence function to execute the command
     return flash_command_sequence();

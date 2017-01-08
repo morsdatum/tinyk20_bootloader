@@ -55,8 +55,13 @@ status_t flash_read_once(flash_driver_t * driver, uint32_t index, uint32_t *dst,
     }
 
     // pass paramters to FTFx
+#if defined(TARGET_MK20DX)
     HW_FTFx_FCCOBx_WR(FTFx_BASE, 0, FTFx_READ_ONCE);
     HW_FTFx_FCCOBx_WR(FTFx_BASE, 1, index);
+#elif defined(TARGET_MK21DX) || defined(MK22DN)
+    FTFL->FCCB0 = (uint8_t)FTFx_READ_ONCE;
+    FTFL->FCCB1 = (uint8_t)index;
+#endif
 
     // calling flash command sequence function to execute the command
     returnCode = flash_command_sequence();

@@ -33,8 +33,14 @@
 
 #include "fsl_platform_common.h"
 #include "fsl_platform_status.h"
+#if defined(TARGET_MK20DX)
 #include "src/fsl_flash_features.h"
+#elif defined(TARGET_MK21DX)
+#include "device/MK21D5/MK21DA5_features.h"
+#elif defined(TARGET_MK22DN)
+#include "device/MK22D5/MK22D5_features.h"
 #include "device/fsl_device_registers.h"
+#endif
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -473,12 +479,24 @@ static inline void flash_cache_enable(bool doEnable)
      HW_FMC_PFB23CR(FMC_BASE).B.B1DCE = (uint32_t)doEnable;
 
 #elif FSL_FEATURE_FLASH_HAS_FMC_FLASH_CACHE_CONTROLS
+	#if defined(TARGET_MK20DX)
     HW_FMC_PFB0CR(FMC_BASE).B.B0DCE = (uint32_t)doEnable;
     HW_FMC_PFB0CR(FMC_BASE).B.B0ICE = (uint32_t)doEnable;
-#ifdef FMC_PFB1CR_B1DCE_MASK // Some chips only have 1 flash bank (K20, K24S for example)
-    HW_FMC_PFB1CR(FMC_BASE).B.B1DCE = (uint32_t)doEnable;
-    HW_FMC_PFB1CR(FMC_BASE).B.B1ICE = (uint32_t)doEnable;
-#endif
+	  #ifdef FMC_PFB1CR_B1DCE_MASK // Some chips only have 1 flash bank (K20, K24S for example)
+      HW_FMC_PFB1CR(FMC_BASE).B.B1DCE = (uint32_t)doEnable;
+      HW_FMC_PFB1CR(FMC_BASE).B.B1ICE = (uint32_t)doEnable;
+	  #endif
+
+	#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+    if(doEnable == __FALSE){
+    	FMC->PFB0CR &= ~(FMC_PFB0CR_B0ICE_MASK | FMC_PFB0CR_B0DCE_MASK);
+    	FMC->PFB1CR &= ~(FMC_PFB1CR_B1ICE_MASK | FMC_PFB1CR_B1DCE_MASK);
+    }
+    else{
+    	FMC->PFB0CR |= (FMC_PFB0CR_B0ICE_MASK | FMC_PFB0CR_B0DCE_MASK);
+    	FMC->PFB1CR |= (FMC_PFB1CR_B1ICE_MASK | FMC_PFB1CR_B1DCE_MASK);
+    }
+	#endif
 #else
     #error "Unknown flash cache controller"
 #endif // FSL_FEATURE_FTFx_MCM_FLASH_CACHE_CONTROLS
@@ -496,7 +514,11 @@ static inline void flash_cache_clear(void)
 
 #elif FSL_FEATURE_FLASH_HAS_FMC_FLASH_CACHE_CONTROLS
     // FSL_FEATURE_FTFx_MCM_FLASH_CACHE_CONTROLS
+	#if defined(TARGET_MK20Dx)
     HW_FMC_PFB0CR(FMC_BASE).B.CINV_WAY = 0xf;
+	#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+    FMC->PFB0CR |= FMC_PFB0CR_CINV_WAY(0xF);
+	#endif
 #else
     #error "Unknown flash cache controller"
 #endif // FSL_FEATURE_FTFx_MCM_FLASH_CACHE_CONTROLS

@@ -11,7 +11,14 @@
 
 #include <RTL.h>
 #include <rl_usb.h>
-#include <MK60N512MD100.h>              /* MK60N512MD100 Definitions          */
+//#include <MK60N512MD100.h>              /* MK60N512MD100 Definitions          */
+#if defined(TARGET_MK20DX)
+#include <MK20D5.h>
+#elif defined(TARGET_MK21DX)
+#include <MK21DA5.h>
+#elif defined(TARGET_MK22DN)
+#include <MK22D5.h>
+#endif
 
 #define __NO_USB_LIB_C
 #include "usb_config.c"
@@ -23,8 +30,9 @@ typedef struct __BUF_DESC {
   uint32_t   buf_addr;
 }BUF_DESC;
 
-BUF_DESC __align(512) BD[(USBD_EP_NUM + 1) * 2 * 2];
-uint8_t  __align(4)   EPBuf[(USBD_EP_NUM + 1)* 2 * 2][64];
+//BUF_DESC __align(512) BD[(USBD_EP_NUM + 1) * 2 * 2];
+__attribute__((__aligned__(512))) BUF_DESC BD[(USBD_EP_NUM + 1) * 2 * 2];
+uint8_t  EPBuf[(USBD_EP_NUM + 1)* 2 * 2][64];
 uint8_t OutEpSize[USBD_EP_NUM + 1];
 
 uint32_t Data1  = 0x55555555;

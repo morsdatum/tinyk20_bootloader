@@ -54,7 +54,11 @@ status_t flash_erase_all(flash_driver_t * driver, uint32_t key)
 
     // preparing passing parameter to erase all flash blocks
     // 1st element for the FCCOB register
+#if defined(TARGET_MK20DX)
     HW_FTFx_FCCOBx_WR(FTFx_BASE, 0, FTFx_ERASE_ALL_BLOCK);
+#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+    FTFL->FCCOB0 = (uint8_t)FTFx_ERASE_ALL_BLOCK;
+#endif
 
     // calling flash command sequence function to execute the command
     return flash_command_sequence();

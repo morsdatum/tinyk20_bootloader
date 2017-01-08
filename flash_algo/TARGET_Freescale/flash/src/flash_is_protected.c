@@ -109,19 +109,35 @@ status_t flash_is_protected(flash_driver_t * driver, uint32_t start, uint32_t le
     {
         if (regionCounter < 8)
         {
+		#if defined(TARGET_MK20DX)
             flashRegionProtectStatus[regionCounter] = ((FTFx->FPROT3) >> regionCounter)&(0x01);
+		#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+            flashRegionProtectStatus[regionCounter] = ((FTFL->FPROT3) >> regionCounter)&(0x01);
+		#endif
         }
         else if ((regionCounter >= 8)&& (regionCounter < 16))
         {
+		#if defined(TARGET_MK20DX)
             flashRegionProtectStatus[regionCounter] = ((FTFx->FPROT2) >> (regionCounter-8))&(0x01);
+		#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+            flashRegionProtectStatus[regionCounter] = ((FTFL->FPROT2) >> (regionCounter-8))&(0x01);
+		#endif
         }
         else if ((regionCounter >= 16)&& (regionCounter < 24))
         {
+		#if defined(TARGET_MK20DX)
             flashRegionProtectStatus[regionCounter] = ((FTFx->FPROT1) >> (regionCounter-16))&(0x01);
+		#elif defined(TARGET_MK21DX) || defined(MK22DN)
+            flashRegionProtectStatus[regionCounter] = ((FTFL->FPROT1) >> (regionCounter-16))&(0x01);
+		#endif
         }
         else
         {
+		#if defined(TARGET_MK20DX)
             flashRegionProtectStatus[regionCounter] = ((FTFx->FPROT0) >> (regionCounter-24))&(0x01);
+		#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+            flashRegionProtectStatus[regionCounter] = ((FTFL->FPROT0) >> (regionCounter-24))&(0x01);
+		#endif
         }
         regionCounter++;
     }
