@@ -9248,6 +9248,22 @@ typedef struct {
  * @addtogroup SDK_Compatibility_Symbols SDK Compatibility
  * @{
  */
+#define PTA_BASE                                 GPIOA_BASE
+#define PTA                                      GPIOA
+#define PTB_BASE                                 GPIOB_BASE
+#define PTB                                      GPIOB
+#define PTC_BASE                                 GPIOC_BASE
+#define PTC                                      GPIOC
+#define PTD_BASE                                 GPIOD_BASE
+#define PTD                                      GPIOD
+#define PTE_BASE                                 GPIOE_BASE
+#define PTE                                      GPIOE
+#define Watchdog_IRQn                            WDOG_EWM_IRQn
+#define Watchdog_IRQHandler                      WDOG_EWM_IRQHandler
+#define LPTimer_IRQn                             LPTMR0_IRQn
+#define LPTimer_IRQHandler                       LPTMR0_IRQHandler
+#define LLW_IRQn                                 LLWU_IRQn
+#define LLW_IRQHandler                           LLWU_IRQHandler
 
 /* No SDK compatibility issues. */
 
