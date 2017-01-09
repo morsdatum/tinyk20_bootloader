@@ -13,9 +13,8 @@ Notes:
 - added __NO_USB_LIB_C preprocessor
 - added TARGET_MK20DX
 - -fshort-wchar
+- -no-wchar-size-warning
 
-Program Bootloader:
-- flash tinyK20_bl_0x0000-0x4FFF.s19
 Enter BOOTLOADER mode:
 ----------------------
 Put PTB1 (pin 28 on package, pin between C and clock below uC) to GND.
