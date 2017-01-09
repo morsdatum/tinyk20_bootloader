@@ -62,10 +62,18 @@ status_t flash_program(flash_driver_t * driver, uint32_t start, uint32_t * src, 
         kFCCOBx[0] = start;
         kFCCOBx[1] = *src++;
 #if (FSL_FEATURE_FLASH_PFLASH_BLOCK_WRITE_UNIT_SIZE == 4)
+	#if defined(TARGET_MK20DX)
         HW_FTFx_FCCOBx_WR(FTFx_BASE, 0, FTFx_PROGRAM_LONGWORD);
+	#elif defined(TARGET_MK21DX) || defined(MK22DN)
+        FTFL->FCCOB0 = (uint8_t)FTFx_PROGRAM_LONGWORD;
+	#endif
 #elif (FSL_FEATURE_FLASH_PFLASH_BLOCK_WRITE_UNIT_SIZE == 8)
         kFCCOBx[2] = *src++;
+	#if defined(TARGET_MK20DX)
         HW_FTFx_FCCOBx_WR(FTFx_BASE, 0, FTFx_PROGRAM_PHRASE);
+	#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+        FTFL->FCCOB0 = (uint8_t)FTFx_PROGRAM_PHRASE
+	#endif
 #else
         #error "Untreated program unit size"
 #endif

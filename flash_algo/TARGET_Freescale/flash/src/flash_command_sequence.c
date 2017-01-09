@@ -29,10 +29,10 @@
  */
 
 #include <assert.h>
-#include "SSD_FTFx_Common.h"
 #include "flash/flash.h"
 #include "device/fsl_device_registers.h"
 #include "fsl_platform_status.h"
+#include "SSD_FTFx_Common.h"
 #include <string.h>
 
 #if BL_TARGET_FLASH
@@ -109,7 +109,7 @@ status_t flash_command_sequence(void)
 #if defined(TARGET_MK20DX)
     HW_FTFx_FSTAT_WR(FTFx_BASE, BM_FTFx_FSTAT_RDCOLERR | BM_FTFx_FSTAT_ACCERR | BM_FTFx_FSTAT_FPVIOL);
 #elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
-    FTFL->FSTAT = (uint8_t)(FTFL_FSTAT_REDCOLERR_MASK | FTFL_FSTAT_ACCERR | FTFL_FSTAT_FPVIOL);
+    FTFL->FSTAT = (uint8_t)(FTFL_FSTAT_RDCOLERR_MASK | FTFL_FSTAT_ACCERR_MASK | FTFL_FSTAT_FPVIOL_MASK);
 #endif
 
 #if BL_TARGET_FLASH
@@ -154,8 +154,8 @@ status_t flash_command_sequence(void)
 	#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
     uint8_t registerValue = FTFL->FSTAT;
 
-    if(registerValue & FTFL_FSTAT_ACCER_MASK)
-    	return kStatus_FlashAcccessError;
+    if(registerValue & FTFL_FSTAT_ACCERR_MASK)
+    	return kStatus_FlashAccessError;
     else if (registerValue & FTFL_FSTAT_FPVIOL_MASK)
     	return kStatus_FlashProtectionViolation;
     else if (registerValue & FTFL_FSTAT_MGSTAT0_MASK)

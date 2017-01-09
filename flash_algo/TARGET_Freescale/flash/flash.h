@@ -39,8 +39,8 @@
 #include "device/MK21D5/MK21DA5_features.h"
 #elif defined(TARGET_MK22DN)
 #include "device/MK22D5/MK22D5_features.h"
-#include "device/fsl_device_registers.h"
 #endif
+#include "device/fsl_device_registers.h"
 #include <stdint.h>
 #include <stdbool.h>
 
