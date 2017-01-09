@@ -8,3 +8,5 @@
 *.sym
 *.s19
 *.hex
+/K21_Bootloader/
+/K22_Bootloader/
