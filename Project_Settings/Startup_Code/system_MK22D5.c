@@ -94,9 +94,10 @@
  * the system frequency. It configures the device and initializes the oscillator
  * (PLL) that is part of the microcontroller device.
  */
-
+#ifdef TARGET_MK22DN
 #include <stdint.h>
-#include "fsl_device_registers.h"
+//#include "fsl_device_registers.h"
+#include "MK22D5.h"
 
 
 
@@ -225,3 +226,4 @@ void SystemCoreClockUpdate (void) {
   } /* (!((MCG->C1 & MCG_C1_CLKS_MASK) == 0x80U)) */
   SystemCoreClock = (MCGOUTClock / (0x01U + ((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK) >> SIM_CLKDIV1_OUTDIV1_SHIFT)));
 }
+#endif

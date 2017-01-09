@@ -37,6 +37,7 @@
 /*****************************************************************************/
 /* Version: GCC for ARM Embedded Processors                                  */
 /*****************************************************************************/
+#ifdef TARGET_MK20DX
     .syntax unified
     .arch armv7-m
 
@@ -474,3 +475,4 @@ Default_Handler:
     def_irq_handler    DefaultISR
 
     .end
+#endif

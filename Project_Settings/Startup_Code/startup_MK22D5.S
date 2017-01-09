@@ -37,6 +37,7 @@
 /*****************************************************************************/
 /* Version: GCC for ARM Embedded Processors                                  */
 /*****************************************************************************/
+#ifdef TARGET_MK22DN
     .syntax unified
     .arch armv7-m
 
@@ -813,3 +814,4 @@ UART3_ERR_IRQHandler:
     def_irq_handler    SWI_IRQHandler
 
     .end
+#endif
