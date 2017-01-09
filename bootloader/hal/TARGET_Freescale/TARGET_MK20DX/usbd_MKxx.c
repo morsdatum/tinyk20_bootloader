@@ -9,12 +9,11 @@
  *      Copyright (c) 2004-2014 KEIL - An ARM Company. All rights reserved.
  *---------------------------------------------------------------------------*/
 
+#if defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
 #include <RTL.h>
 #include <rl_usb.h>
 //#include <MK60N512MD100.h>              /* MK60N512MD100 Definitions          */
-#if defined(TARGET_MK20DX)
-#include <MK20D5.h>
-#elif defined(TARGET_MK21DX)
+#if defined(TARGET_MK21DX)
 #include <MK21DA5.h>
 #elif defined(TARGET_MK22DN)
 #include <MK22D5.h>
@@ -55,9 +54,9 @@ uint32_t Data1  = 0x55555555;
 #define OUT_TOKEN      0x01
 #define TOK_PID(idx)   ((BD[idx].stat >> 2) & 0x0F)
 
-__inline static void protected_and (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) & val),addr)); }
-__inline static void protected_or  (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) | val),addr)); }
-__inline static void protected_xor (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) ^ val),addr)); }
+//__inline static void protected_and (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) & val),addr)); }
+//__inline static void protected_or  (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) | val),addr)); }
+//__inline static void protected_xor (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) ^ val),addr)); }
 
 /*
  *  USB Device Interrupt enable
@@ -337,12 +336,14 @@ void USBD_DisableEP (uint32_t EPNum) {
 void USBD_ResetEP (uint32_t EPNum) {
   if (EPNum & 0x80) {
     EPNum &= 0x0F;
-    protected_or(&Data1, (1 << ((EPNum * 2) + 1)));
+    //protected_or(&Data1, (1 << ((EPNum * 2) + 1)));
+    Data1 |= (1 << ((EPNum * 2) + 1));
     BD[IDX(EPNum, TX, ODD )].buf_addr = (uint32_t) &(EPBuf[IDX(EPNum, TX, ODD )][0]);
     BD[IDX(EPNum, TX, EVEN)].buf_addr = 0;
   }
   else {
-    protected_and(&Data1, ~(1 << (EPNum * 2)));
+    //protected_and(&Data1, ~(1 << (EPNum * 2)));
+	Data1 |= (1 << ((EPNum * 2) + 1));
     BD[IDX(EPNum, RX, ODD )].bc       = OutEpSize[EPNum];
     BD[IDX(EPNum, RX, ODD )].buf_addr = (uint32_t) &(EPBuf[IDX(EPNum, RX, ODD )][0]);
     BD[IDX(EPNum, RX, ODD )].stat     = BD_OWN_MASK | BD_DTS_MASK;
@@ -416,9 +417,11 @@ uint32_t USBD_ReadEP (uint32_t EPNum, uint8_t *pData) {
 
   if ((Data1 >> (idx / 2) & 1) == ((BD[idx].stat >> 6) & 1)) {
     if (setup && (pData[6] == 0)) {     /* if no setup data stage,            */
-      protected_and(&Data1, ~1);           /* set DATA0                          */
+      //protected_and(&Data1, ~1);           /* set DATA0                          */
+    	Data1 &= ~1UL;
     } else {
-      protected_xor(&Data1, (1 << (idx / 2)));
+      //protected_xor(&Data1, (1 << (idx / 2)));
+    	Data1 ^= (1 << (idx / 2));
     }
   }
 
@@ -462,7 +465,8 @@ uint32_t USBD_WriteEP (uint32_t EPNum, uint8_t *pData, uint32_t cnt) {
   else {
     BD[idx].stat = BD_OWN_MASK | BD_DTS_MASK | BD_DATA01_MASK;
   }
-  protected_xor(&Data1, (1 << (idx / 2)));
+  //protected_xor(&Data1, (1 << (idx / 2)));
+  Data1 ^= (1 << (idx / 2));
   return(cnt);
 }
 
@@ -628,3 +632,4 @@ void USB0_IRQHandler(void) {
     }
   }
 }
+#endif

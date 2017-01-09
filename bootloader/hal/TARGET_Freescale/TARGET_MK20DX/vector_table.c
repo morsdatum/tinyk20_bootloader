@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#if defined(TARGET_MK20X)
+#if defined(TARGET_MK20DX)
 #include <MK20D5.h>
 #elif defined(TARGET_MK21DX)
 #include <MK21DA5.h>

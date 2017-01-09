@@ -53,7 +53,11 @@ void gpio_set_cdc_led(uint8_t state) {
 
 void time_delay_ms(uint32_t delay)
 {
+#if defined(TARGET_MK20DX)
     SIM->SCGC5 |= SIM_SCGC5_LPTIMER_MASK;
+#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+    SIM->SCGC5 |= SIM_SCGC5_LPTMR_MASK;
+#endif
     LPTMR0->CMR = delay;
     LPTMR0->PSR = LPTMR_PSR_PCS(1) | LPTMR_PSR_PBYP_MASK;
     LPTMR0->CSR |= LPTMR_CSR_TEN_MASK;

@@ -13,15 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifdef TARGET_MK20DX
 #include <RTL.h>
 #include <rl_usb.h>
-#if defined(TARGET_MK20DX)
 #include <MK20D5.h>
-#elif defined(TARGET_MK21DX)
-#include <MK21DA5.h>
-#elif defined(TARGET_MK22DN)
-#include <MK22D5.h>
-#endif
+
 
 #define __NO_USB_LIB_C
 #include "usb_config.c"
@@ -633,7 +629,7 @@ void USB0_IRQHandler(void) {
     USB0->ISTAT = USB_ISTAT_TOKDNE_MASK;
   }
 }
-
+#endif
 
 
 
