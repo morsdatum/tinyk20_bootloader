@@ -15,16 +15,23 @@
  */
 #if defined(TARGET_MK20DX)
 #include <MK20D5.h>
+#define NVIC_NUM_VECTORS (16 + 46)            // CORE + MCU Peripherals
+#define NVIC_RAM_VECTOR_ADDRESS (0x1FFFE000)  // Vectors positioned at start of RAM
+
 #elif defined(TARGET_MK21DX)
 #include <MK21DA5.h>
+#define NVIC_NUM_VECTORS (16 + 65)            // CORE + MCU Peripherals
+#define NVIC_RAM_VECTOR_ADDRESS (0x1FFFC000)  // Vectors positioned at start of RAM
+
 #elif defined(TARGET_MK22DN)
 #include <MK22D5.h>
+#define NVIC_NUM_VECTORS (16 + 65)            // CORE + MCU Peripherals
+#define NVIC_RAM_VECTOR_ADDRESS (0x1FFF8000)  // Vectors positioned at start of RAM
+
 #endif
 #include "vector_table.h"
 #include "flash_hal.h"
 
-#define NVIC_NUM_VECTORS (16 + 46)            // CORE + MCU Peripherals
-#define NVIC_RAM_VECTOR_ADDRESS (0x1FFFE000)  // Vectors positioned at start of RAM
 
 void relocate_vector_table() {
     uint32_t *vectors;
