@@ -99,7 +99,7 @@
 //#include "fsl_device_registers.h"
 #include "MK22D5.h"
 
-
+#define DISABLE_WDOG 1
 
 /* ----------------------------------------------------------------------------
    -- Core clock
@@ -127,6 +127,21 @@ void SystemInit (void) {
                  WDOG_STCTRLH_CLKSRC_MASK |
                  0x0100U;
 #endif /* (DISABLE_WDOG) */
+  /* Switch to FEI Mode */
+  /* MCG->C1: CLKS=0,FRDIV=0,IREFS=1,IRCLKEN=1,IREFSTEN=0 */
+  MCG->C1 = (uint8_t)0x06u;
+  /* MCG->C2: ??=0,??=0,RANGE0=0,HGO=0,EREFS=0,LP=0,IRCS=0 */
+  MCG->C2 = (uint8_t)0x00u;
+  /* MCG_C4: DMX32=0,DRST_DRS=1 */
+  MCG->C4 = (uint8_t)((MCG->C4 & (uint8_t)~(uint8_t)0xC0u) | (uint8_t)0x20u);
+  /* MCG->C5: ??=0,PLLCLKEN=0,PLLSTEN=0,PRDIV0=0 */
+  MCG->C5 = (uint8_t)0x00u;
+  /* MCG->C6: LOLIE=0,PLLS=0,CME=0,VDIV0=0 */
+  MCG->C6 = (uint8_t)0x00u;
+  while((MCG->S & MCG_S_IREFST_MASK) == 0u) { /* Check that the source of the FLL reference clock is the internal reference clock. */
+  }
+  while((MCG->S & 0x0Cu) != 0x00u) {    /* Wait until output of the FLL is selected */
+  }
 
 }
 
