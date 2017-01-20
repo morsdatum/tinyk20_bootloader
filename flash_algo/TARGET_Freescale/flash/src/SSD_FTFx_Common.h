@@ -137,7 +137,7 @@
     #define BM_FTFx_FSEC_KEYEN BM_FTFL_FSEC_KEYEN
   #endif
 #else
-  #if !defined(TARGET_MK21DX) && !defined(TARGET_MK22DN)
+  #if !defined(TARGET_MK21DX) && !defined(TARGET_MK22DN) && !defined(TARGET_MKL82Z)
     #error "Unknown flash controller"
   #endif
 #endif

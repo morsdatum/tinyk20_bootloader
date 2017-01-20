@@ -58,6 +58,8 @@ status_t flash_erase_all_unsecure(flash_driver_t * driver, uint32_t key)
     HW_FTFx_FCCOBx_WR(FTFx_BASE, 0, FTFx_ERASE_ALL_BLOCK_UNSECURE);
 #elif defined(TARGET_MK21DX) || defined(TARGT_MK22DN)
     FTFL->FCCOB0 = (uint8_t)FTFx_ERASE_ALL_BLOCK_UNSECURE;
+#elif defined(TARGET_MKL82Z)
+    FTFA->FCCOB0 = (uint8_t)FTFx_ERASE_ALL_BLOCK_UNSECURE;
 #endif
 
     // Call flash command sequence function to execute the command.

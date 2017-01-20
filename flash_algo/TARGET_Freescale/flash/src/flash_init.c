@@ -75,7 +75,7 @@ status_t flash_init(flash_driver_t * driver)
     // calculate the flash density from SIM_FCFG1.PFSIZE
 #if defined(TARGET_MK20DX)
     uint32_t flashDensity = kFlashDensities[HW_SIM_FCFG1(SIM_BASE).B.PFSIZE] << 12;
-#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN) || defined(TARGET_MKL82Z)
     uint32_t flashDensity = kFlashDensities[(SIM->FCFG1 & SIM_FCFG1_PFSIZE_MASK)>> 24] << 12;
 #endif
     if (flashDensity == 0)

@@ -68,6 +68,9 @@ status_t flash_verify_program(flash_driver_t * driver,
 #elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
         FTFL->FCCOB0 = (uint8_t)FTFx_PROGRAM_CHECK;
         FTFL->FCCOB4 = (uint8_t)margin;
+#elif defined(TARGET_MKL82Z)
+        FTFA->FCCOB0 = (uint8_t)FTFx_PROGRAM_CHECK;
+        FTFA->FCCOB4 = (uint8_t)margin;
 #endif
         kFCCOBx[2] = *(uint32_t *)expectedData;
 

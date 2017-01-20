@@ -52,6 +52,9 @@ status_t flash_verify_erase_all(flash_driver_t * driver, flash_margin_value_t ma
 #elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
     FTFL->FCCOB0 = (uint8_t)FTFx_VERIFY_ALL_BLOCK;
     FTFL->FCCOB1 = (uint8_t)margin;
+#elif defined(TARGET_MKL82Z)
+    FTFA->FCCOB0 = (uint8_t)FTFx_VERIFY_ALL_BLOCK;
+    FTFA->FCCOB1 = (uint8_t)margin;
 #endif
 
     // calling flash command sequence function to execute the command

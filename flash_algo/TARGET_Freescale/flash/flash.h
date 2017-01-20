@@ -39,6 +39,8 @@
 #include "device/MK21D5/MK21DA5_features.h"
 #elif defined(TARGET_MK22DN)
 #include "device/MK22D5/MK22D5_features.h"
+#elif defined(TARGET_MKL82Z)
+#include "device/MKL82Z7/MKL82Z7_features.h"
 #endif
 #include "device/fsl_device_registers.h"
 #include <stdint.h>

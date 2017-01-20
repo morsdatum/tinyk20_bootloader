@@ -78,6 +78,11 @@ status_t flash_verify_erase(flash_driver_t * driver, uint32_t start, uint32_t le
         FTFL->FCCOB4 = (uint8_t)(0xFF & (numberOfPhrases >> 8));
         FTFL->FCCOB5 = (uint8_t)(0xFF & numberOfPhrases);
         FTFL->FCCOB6 = (uint8_t)margin;
+#elif defined(TARGET_MKL82Z)
+        FTFA->FCCOB0 = (uint8_t)FTFx_VERIFY_SECTION;
+        FTFA->FCCOB4 = (uint8_t)(0xFF & (numberOfPhrases >> 8));
+        FTFA->FCCOB5 = (uint8_t)(0xFF & numberOfPhrases);
+        FTFA->FCCOB6 = (uint8_t)margin;
 #endif
 
         // calling flash command sequence function to execute the command

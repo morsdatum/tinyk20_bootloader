@@ -27,7 +27,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+#if defined(TARGET_MK20DX) || defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
 #include <stdint.h>
 #include "flash_densities.h"
 
@@ -55,7 +55,7 @@ const uint16_t kFlashDensities[] = {
         0,      // 0xe - reserved
         256,    // 0xf - 1048576
     };
-
+#endif
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

@@ -36,6 +36,10 @@
 #define SECTOR_SIZE		(0x800)
 #define NB_SECTOR		(256)
 
+#elif defined(TARGET_MKL82Z)
+#define SECTOR_SIZE     (0x1000)
+#define NB_SECOTR	    (32)
+
 #endif
 
 #define END_FLASH         (NB_SECTOR*SECTOR_SIZE)

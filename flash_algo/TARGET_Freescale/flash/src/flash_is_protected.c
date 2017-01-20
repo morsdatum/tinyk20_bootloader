@@ -113,6 +113,8 @@ status_t flash_is_protected(flash_driver_t * driver, uint32_t start, uint32_t le
             flashRegionProtectStatus[regionCounter] = ((FTFx->FPROT3) >> regionCounter)&(0x01);
 		#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
             flashRegionProtectStatus[regionCounter] = ((FTFL->FPROT3) >> regionCounter)&(0x01);
+		#elif defined(TARGET_MKL82Z)
+            flashRegionProtectStatus[regionCounter] = ((FTFA->FPROT3) >> regionCounter)&(0x01);
 		#endif
         }
         else if ((regionCounter >= 8)&& (regionCounter < 16))
@@ -121,6 +123,8 @@ status_t flash_is_protected(flash_driver_t * driver, uint32_t start, uint32_t le
             flashRegionProtectStatus[regionCounter] = ((FTFx->FPROT2) >> (regionCounter-8))&(0x01);
 		#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
             flashRegionProtectStatus[regionCounter] = ((FTFL->FPROT2) >> (regionCounter-8))&(0x01);
+		#elif defined(TARGET_MKL82Z)
+            flashRegionProtectStatus[regionCounter] = ((FTFA->FPROT2) >> (regionCounter-8))&(0x01);
 		#endif
         }
         else if ((regionCounter >= 16)&& (regionCounter < 24))
@@ -129,6 +133,8 @@ status_t flash_is_protected(flash_driver_t * driver, uint32_t start, uint32_t le
             flashRegionProtectStatus[regionCounter] = ((FTFx->FPROT1) >> (regionCounter-16))&(0x01);
 		#elif defined(TARGET_MK21DX) || defined(MK22DN)
             flashRegionProtectStatus[regionCounter] = ((FTFL->FPROT1) >> (regionCounter-16))&(0x01);
+		#elif defined(TARGET_MKL82Z)
+            flashRegionProtectStatus[regionCounter] = ((FTFA->FPROT1) >> (regionCounter-16))&(0x01);
 		#endif
         }
         else
@@ -137,6 +143,8 @@ status_t flash_is_protected(flash_driver_t * driver, uint32_t start, uint32_t le
             flashRegionProtectStatus[regionCounter] = ((FTFx->FPROT0) >> (regionCounter-24))&(0x01);
 		#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
             flashRegionProtectStatus[regionCounter] = ((FTFL->FPROT0) >> (regionCounter-24))&(0x01);
+		#elif defined(TARGET_MKL82Z)
+            flashRegionProtectStatus[regionCounter] = ((FTFA->FPROT0) >> (regionCounter-24))&(0x01);
 		#endif
         }
         regionCounter++;

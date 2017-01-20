@@ -19,6 +19,8 @@
 #include <MK21DA5.h>
 #elif defined(TARGET_MK22DN)
 #include <MK22D5.h>
+#elif defined(TARGET_MKL82Z)
+#include <MKL82Z7.h>
 #endif
 #include "read_uid.h"
 

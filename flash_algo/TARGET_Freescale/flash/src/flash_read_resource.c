@@ -91,6 +91,9 @@ status_t flash_read_resource(flash_driver_t * driver, uint32_t start, uint32_t *
 #elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
         FTFL->FCCOB0 = (uint8_t)FTFx_READ_RESOURCE;
         FTFL->FCCOB8 = (uint8_t)option;
+#elif defined(TARGET_MKL82Z)
+        FTFA->FCCOB0 = (uint8_t)FTFx_READ_RESOURCE;
+        FTFA->FCCOB8 = (uint8_t)option;
 #endif
 
         // calling flash command sequence function to execute the command

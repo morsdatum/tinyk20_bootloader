@@ -60,6 +60,9 @@ status_t flash_program_once(flash_driver_t * driver, uint32_t index, uint32_t *s
 #elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
     FTFL->FCCOB0 = (uint8_t)FTFx_PROGRAM_ONCE;
     FTFL->FCCOB1 = (uint8_t)index;
+#elif defined(TARGET_MKL82Z)
+    FTFA->FCCOB0 = (uint8_t)FTFx_PROGRAM_ONCE;
+    FTFA->FCCOB1 = (uint8_t)index;
 #endif
     kFCCOBx[1] = *src;
 

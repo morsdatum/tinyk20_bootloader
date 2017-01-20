@@ -28,6 +28,11 @@
 #define NVIC_NUM_VECTORS (16 + 65)            // CORE + MCU Peripherals
 #define NVIC_RAM_VECTOR_ADDRESS (0x1FFF8000)  // Vectors positioned at start of RAM
 
+#elif defined(TARGET_MKL82Z)
+#include <MKL82Z7.h>
+#define NVIC_NUM_VECTORS (16 + 32)
+#define NVIC_RAM_VECTOR_ADDRESS (0x1FFFA000)
+
 #endif
 #include "vector_table.h"
 #include "flash_hal.h"

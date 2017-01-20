@@ -57,6 +57,8 @@ void time_delay_ms(uint32_t delay)
     SIM->SCGC5 |= SIM_SCGC5_LPTIMER_MASK;
 #elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
     SIM->SCGC5 |= SIM_SCGC5_LPTMR_MASK;
+#elif defined(TARGET_MKL82Z)
+    SIM->SCGC5 |= SIM_SCGC5_LPTMR0_MASK;
 #endif
     LPTMR0->CMR = delay;
     LPTMR0->PSR = LPTMR_PSR_PCS(1) | LPTMR_PSR_PBYP_MASK;

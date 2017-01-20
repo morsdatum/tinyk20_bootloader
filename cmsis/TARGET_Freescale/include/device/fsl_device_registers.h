@@ -631,6 +631,9 @@
 #elif defined(CPU_MK22DN512VLK5)
 	#include "device/MK22D5/MK22D5.h"
 
+#elif defined(CPU_MKL82Z128VLK7)
+	#include "device/MKL82Z7/MKL82Z7.h"
+
 #else
     #error "No valid CPU defined!"
 #endif

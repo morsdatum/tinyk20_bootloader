@@ -58,6 +58,8 @@ status_t flash_security_bypass(flash_driver_t * driver, const uint8_t * backdoor
     registerValue = FTFx->FSEC;
 #elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
     registerValue = FTFL->FSEC;
+#elif defined(TARGET_MKL82Z)
+    registerValue = FTFA->FSEC;
 #endif
 
     // Check to see if flash is in secure state (any state other than 0x2)
@@ -85,6 +87,16 @@ status_t flash_security_bypass(flash_driver_t * driver, const uint8_t * backdoor
         FTFL->FCCOB9 = (uint8_t)backdoorkey[5];
         FTFL->FCCOBA = (uint8_t)backdoorkey[6];
         FTFL->FCCOBB = (uint8_t)backdoorkey[7];
+#elif defined(TARGET_MKL82Z)
+        FTFA->FCCOB0 = (uint8_t)FTFx_SECURITY_BY_PASS;
+        FTFA->FCCOB4 = (uint8_t)backdoorkey[0];
+        FTFA->FCCOB5 = (uint8_t)backdoorkey[1];
+        FTFA->FCCOB6 = (uint8_t)backdoorkey[2];
+        FTFA->FCCOB7 = (uint8_t)backdoorkey[3];
+        FTFA->FCCOB8 = (uint8_t)backdoorkey[4];
+        FTFA->FCCOB9 = (uint8_t)backdoorkey[5];
+        FTFA->FCCOBA = (uint8_t)backdoorkey[6];
+        FTFA->FCCOBB = (uint8_t)backdoorkey[7];
 #endif
 
         // calling flash command sequence function to execute the command

@@ -55,6 +55,8 @@ status_t flash_get_security_state(flash_driver_t * driver, flash_security_state_
     registerValue = FTFx->FSEC;
 #elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
     registerValue = FTFL->FSEC;
+#elif defined(TARGET_MKL82Z)
+    registerValue = FTFA->FSEC;
 #endif
 
 
@@ -63,6 +65,8 @@ status_t flash_get_security_state(flash_driver_t * driver, flash_security_state_
     if (FLASH_SECURITY_STATE_UNSECURED == (registerValue & BM_FTFx_FSEC_SEC))
 #elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
     if (FLASH_SECURITY_STATE_UNSECURED == (registerValue & FTFL_FSEC_SEC_MASK))
+#elif defined(TARGET_MKL82Z)
+    if (FLASH_SECURITY_STATE_UNSECURED == (registerValue & FTFA_FSEC_SEC_MASK))
 #endif
     {
         // Flash in unsecured state
@@ -75,7 +79,9 @@ status_t flash_get_security_state(flash_driver_t * driver, flash_security_state_
 #if defined(TARGET_MK20DX)
         if (FLASH_SECURITY_STATE_KEYEN == (registerValue & BM_FTFx_FSEC_KEYEN))
 #elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
-        if (FLASH_SECURITY_STATE_KEYEN == (registerValue & FTFTL_FSEC_KEYEN_MASK))
+        if (FLASH_SECURITY_STATE_KEYEN == (registerValue & FTFL_FSEC_KEYEN_MASK))
+#elif defined(TARGET_MKL82Z)
+        if (FLASH_SECURITY_STATE_KEYEN == (registerValue & FTFA_FSEC_KEYEN_MASK))
 #endif
         {
             // Backdoor key security enabled
