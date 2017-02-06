@@ -90,8 +90,13 @@ status_t flash_init(flash_driver_t * driver)
     driver->PFlashSectorSize = FSL_FEATURE_FLASH_PFLASH_BLOCK_SECTOR_SIZE;
 
 #if FSL_FEATURE_FLASH_HAS_ACCESS_CONTROL
+	#ifdef TARGET_MK20Dx
     driver->PFlashAccessSegmentSize =  kFlashAccessSegmentBase << FTFx->FACSS;
     driver->PFlashAccessSegmentCount = FTFx->FACSN;
+	#elif defined(TARGET_MKL82Z)
+    driver->PFlashAccessSegmentSize = kFlashAccessSegmentBase << FTFA->FACSS;
+    driver->PFlashAccessSegmentCount = FTFA->FACSN;
+	#endif
 #else
     driver->PFlashAccessSegmentSize =  0;
     driver->PFlashAccessSegmentCount = 0;

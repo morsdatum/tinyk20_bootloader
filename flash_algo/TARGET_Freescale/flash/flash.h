@@ -475,7 +475,14 @@ status_t flash_get_property(flash_driver_t * driver, flash_property_t whichPrope
 static inline void flash_cache_enable(bool doEnable)
 {
 #if FSL_FEATURE_FLASH_HAS_MCM_FLASH_CACHE_CONTROLS
+	#ifdef TARGET_MK20DX
     HW_MCM_PLACR(MCM_BASE).B.DFCC = (uint32_t)doEnable;
+	#elif defined(TARGET_MKL82Z)
+    if(doEnable==__TRUE)
+    	MCM->PLACR &= ~MCM_PLACR_DFCC_MASK;
+    else
+    	MCM->PLACR |= MCM_PLACR_DFCC_MASK;
+	#endif
 #elif defined(CPU_MK66FN2M0VLQ18)
      HW_FMC_PFB01CR(FMC_BASE).B.B0DCE = (uint32_t)doEnable;
      HW_FMC_PFB23CR(FMC_BASE).B.B1DCE = (uint32_t)doEnable;
@@ -510,7 +517,11 @@ static inline void flash_cache_enable(bool doEnable)
 static inline void flash_cache_clear(void)
 {
 #if FSL_FEATURE_FLASH_HAS_MCM_FLASH_CACHE_CONTROLS
+	#ifdef TARGET_MK20DX
     HW_MCM_PLACR(MCM_BASE).B.CFCC = 1;
+	#elif defined(TARGET_MKL82Z)
+    MCM->PLACR |= MCM_PLACR_CFCC_MASK;
+	#endif
 #elif defined(CPU_MK66FN2M0VLQ18)
      HW_FMC_PFB01CR(FMC_BASE).B.CINV_WAY = 0xf;
 

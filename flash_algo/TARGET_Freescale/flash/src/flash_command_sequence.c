@@ -61,6 +61,9 @@ void flash_run_command(FTFx_REG_ACCESS_TYPE ftfx_fstat)
 #elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
     *ftfx_fstat = FTFL_FSTAT_CIFF_MASK;
     while(!((*ftfx_fstat) & FTFL_FSTAT_CCIF_MASK));
+#elif defined(TARGET_MKL82Z)
+    *ftfx_fstat = FTFA_FSTAT_CIFF_MASK;
+    while(!((*ftfx_fstat) & FTFA_FSTAT_CCIF_MASK));
 #endif
 }
 
@@ -110,6 +113,8 @@ status_t flash_command_sequence(void)
     HW_FTFx_FSTAT_WR(FTFx_BASE, BM_FTFx_FSTAT_RDCOLERR | BM_FTFx_FSTAT_ACCERR | BM_FTFx_FSTAT_FPVIOL);
 #elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
     FTFL->FSTAT = (uint8_t)(FTFL_FSTAT_RDCOLERR_MASK | FTFL_FSTAT_ACCERR_MASK | FTFL_FSTAT_FPVIOL_MASK);
+#elif defined(TARGET_MKL82Z)
+    FTFA->FSTAT = (uint8_t)(FTFA_FSTAT_RDCOLERR_MASK | FTFA_FSTAT_ACCERR_MASK | FTFA_FSTAT_FPVIOL_MASK);
 #endif
 
 #if BL_TARGET_FLASH
@@ -127,6 +132,9 @@ status_t flash_command_sequence(void)
 	#elif defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
     FTFL->FSTAT = (uint8_t)FTFL_FSTAT_CCIF_MASK;
     while(!(FTFL->FSTAT & FTFL_FSTAT_CCIF_MASK));
+	#elif defined(TARGET_MKL82Z)
+    FTFA->FSTAT = (uint8_t)FTFA_FSTAT_CCIF_MASK;
+    while(!(FTFA->FSTAT & FTFA_FSTAT_CCIF_MASK));
 	#endif
 #endif
 
@@ -160,6 +168,16 @@ status_t flash_command_sequence(void)
     	return kStatus_FlashProtectionViolation;
     else if (registerValue & FTFL_FSTAT_MGSTAT0_MASK)
     	return kStatus_FlashCommandFailure;
+	#elif defined(TARGET_MKL82Z)
+    uint8_t registerValue = FTFA->FSTAT;
+
+    if(registerValue & FTFA_FSTAT_ACCERR_MASK)
+    	return kStatus_FlashAccessError;
+    else if (registerValue & FTFA_FSTAT_FPVIOL_MASK)
+    	return kStatus_FlashProtectionViolation;
+    else if (registerValue & FTFA_FSTAT_MGSTAT0_MASK)
+    	return kStatus_FlashCommandFailure;
+
 	#endif
 
     return kStatus_Success;
