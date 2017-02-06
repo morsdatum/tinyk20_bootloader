@@ -33,6 +33,9 @@
 #elif defined(TARGET_MK22DN)
 #include <MK22D5.h>
 #   define WANTED_SIZE_IN_KB        (512)
+#elif defined(TARGET_MKL82Z)
+#include <MKL82Z7.h>
+#   define WANTED_SIZE_IN_KB		(128)
 #endif
 
 //#if defined(TARGET_LPC11U35)
