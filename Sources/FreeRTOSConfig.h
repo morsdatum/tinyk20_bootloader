@@ -97,7 +97,11 @@
 #define configCPU_FAMILY_IS_ARM_M4(fam)      (((fam)==configCPU_FAMILY_ARM_M4)  || ((fam)==configCPU_FAMILY_ARM_M4F))
 #define configCPU_FAMILY_IS_ARM(fam)         (((fam)==configCPU_FAMILY_ARM_M0P) || configCPU_FAMILY_IS_ARM_M4(fam))
 
-#define configCPU_FAMILY                          configCPU_FAMILY_ARM_M4
+#if defined(TARGET_MKL20DX) || defined(TARGET_MK21DX) || defined(TARGET_MK22DN)
+#define configCPU_FAMILY						configCPU_FAMILY_ARM_M4
+#elif defined(TARGET_MKL82Z)
+#define configCPU_FAMILY                        configCPU_FAMILY_ARM_M0P
+#endif
 /*-----------------------------------------------------------
  * Application specific definitions.
  *
