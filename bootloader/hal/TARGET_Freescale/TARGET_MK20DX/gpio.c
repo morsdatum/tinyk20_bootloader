@@ -19,27 +19,46 @@
 #include <MK21DA5.h>
 #elif defined(TARGET_MK22DN)
 #include <MK22D5.h>
+#elif defined(TARGET_MKL82Z)
+#include <MKL82Z7.h>
 #endif
 #include "gpio.h"
 
 void gpio_init(void) {
     // clock for LED and button
+	#ifdef TARGET_MKL82Z
+	SIM->SCGC5 |= SIM_SCGC5_PTD_MASK | SIM_SCGC5_PTB_MASK;
+	#else
     SIM->SCGC5 |= SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTB_MASK;
+	#endif
 
     // Green LED, only one LED available
-    PORTD->PCR[4] = PORT_PCR_MUX(1);
-    PTD->PDOR = 1UL << 4;
-    PTD->PDDR = 1UL << 4;
+    PORTD->PCR[GPIO_GREEN_LED_PIN] = PORT_PCR_MUX(1);
+#ifdef TARGET_MKL82Z
+    GPIOD->PDOR = 1UL << GPIO_GREEN_LED_PIN;
+    GPIOD->PDDR = 1UL << GPIO_GREEN_LED_PIN;
+#else
+    PTD->PDOR = 1UL << GPIO_GREEN_LED_PIN;
+    PTD->PDDR = 1UL << GPIO_GREEN_LED_PIN;
+#endif
 
     // RST button
-    PORTB->PCR[1] = PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_PFE_MASK | PORT_PCR_MUX(1);
+    PORTB->PCR[GPIO_RST_BTN_PIN] = PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_PFE_MASK | PORT_PCR_MUX(1);
 }
 
 void gpio_set_dap_led(uint8_t state) {
     if (state) {
-        PTD->PCOR  |= 1UL << 4; // LED on
+#ifdef TARGET_MKL82Z
+    	GPIOD->PCOR  |= 1UL << GPIO_GREEN_LED_PIN; // LED on
+#else
+        PTD->PCOR  |= 1UL << GPIO_GREEN_LED_PIN; // LED on
+#endif
     } else {
-        PTD->PSOR  |= 1UL << 4; // LED off
+#ifdef TARGET_MKL82Z
+    	GPIOD->PSOR  |= 1UL << GPIO_GREEN_LED_PIN; // LED off
+#else
+        PTD->PSOR  |= 1UL << GPIO_GREEN_LED_PIN; // LED off
+#endif
     }
 }
 
@@ -69,7 +88,11 @@ void time_delay_ms(uint32_t delay)
 
 uint8_t gpio_get_pin_loader_state(void) {
     time_delay_ms(2); //delay 2ms for pull-up enable
-    return (PTB->PDIR & (1UL << 1));
+#ifdef TARGET_MKL82Z
+    return (GPIOB->PDIR & (1UL << GPIO_RST_BTN_PIN));
+#else
+    return (PTB->PDIR & (1UL << GPIO_RST_BTN_PIN));
+#endif
 }
 
 

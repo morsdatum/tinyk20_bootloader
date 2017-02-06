@@ -24,4 +24,7 @@ void    gpio_set_cdc_led(uint8_t state);
 void    gpio_set_dap_led(uint8_t state);
 uint8_t gpio_get_pin_loader_state(void);
 
+#define GPIO_GREEN_LED_PIN 4
+#define GPIO_RST_BTN_PIN 1
+
 #endif
