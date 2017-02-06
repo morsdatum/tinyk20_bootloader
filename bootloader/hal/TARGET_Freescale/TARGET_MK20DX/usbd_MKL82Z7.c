@@ -8,7 +8,7 @@
  *      This code is part of the RealView Run-Time Library.
  *      Copyright (c) 2004-2014 KEIL - An ARM Company. All rights reserved.
  *---------------------------------------------------------------------------*/
-#if defined(TARGET_MKL82Z7)
+#if defined(TARGET_MKL82Z)
 #include <RTL.h>
 #include <rl_usb.h>
 #include <MKL82Z7.h>
@@ -456,7 +456,7 @@ uint32_t USBD_WriteEP (uint32_t EPNum, uint8_t *pData, uint32_t cnt) {
     BD[idx].stat = BD_OWN_MASK | BD_DTS_MASK | BD_DATA01_MASK;
   }
   //protected_xor(&Data1, (1 << (idx / 2)));
-  Data1 ^= (1 << (idx / 2));S
+  Data1 ^= (1 << (idx / 2));
   return(cnt);
 }
 
