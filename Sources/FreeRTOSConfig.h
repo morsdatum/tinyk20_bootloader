@@ -142,7 +142,15 @@
 #define configTOTAL_HEAP_SIZE                     ((size_t)(8092)) /* size of heap in bytes */
 #define configUSE_HEAP_SECTION_NAME               1 /* set to 1 if a custom section name (configHEAP_SECTION_NAME_STRING) shall be used, 0 otherwise */
 #if configUSE_HEAP_SECTION_NAME
+	#ifdef TARGET_MK20DX
 #define configHEAP_SECTION_NAME_STRING            ".m_data_1FFFE000" /* heap section name (use e.g. ".m_data_20000000" for gcc and "m_data_20000000" for IAR). Check your linker file for the name used. */
+	#elif defined(TARGET_MK21DX)
+#define configHEAP_SECTION_NAME_STRING			".m_data_1FFFC000"
+	#elif defined(TARGET_MK22DN)
+#define configHEAP_SECTION_NAME_STRING			".m_data_1FFF8000"
+	#elif defined(TARGET_MKL82Z)
+#define configHEAP_SECTION_NAME_STRING			".m_data_1FFFA000"
+  #endif
 #endif
 /*----------------------------------------------------------*/
 #define configMAX_TASK_NAME_LEN                   12 /* task name length */
