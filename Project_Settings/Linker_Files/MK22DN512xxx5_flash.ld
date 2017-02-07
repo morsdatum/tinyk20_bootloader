@@ -59,8 +59,8 @@ MEMORY
   m_interrupts          (RX)  : ORIGIN = 0x00000000, LENGTH = 0x00000400
   m_flash_config        (RX)  : ORIGIN = 0x00000400, LENGTH = 0x00000010
   m_text                (RX)  : ORIGIN = 0x00000410, LENGTH = 0x0007FBF0
-  m_data                (RW)  : ORIGIN = 0x1FFF8000, LENGTH = 0x00008000
-  m_data_2              (RW)  : ORIGIN = 0x20000000, LENGTH = 0x00008000
+  m_data_1FFF8000       (RW)  : ORIGIN = 0x1FFF8000, LENGTH = 0x00008000
+  m_data                (RW)  : ORIGIN = 0x20000000, LENGTH = 0x00008000
 }
 
 /* Define output sections */
@@ -198,6 +198,19 @@ SECTIONS
   } > m_data
 
   __DATA_END = __DATA_ROM + (__data_end__ - __data_start__);
+  
+  __m_data_1FFF8000_ROMStart = __DATA_ROM + SIZEOF(.data);
+  .m_data_1FFF8000 : AT(__m_data_1FFF8000_ROMStart)
+  {
+     . = ALIGN(4);
+     __m_data_1FFF8000_RAMStart = .;
+     *(.m_data_1FFF8000)     /* This is an user defined section */
+     __m_data_1FFF8000_RAMEnd = .;
+     . = ALIGN(4);
+  } > m_data_1FFF8000
+  __m_data_1FFF8000_ROMSize = __m_data_1FFF8000_RAMEnd - __m_data_1FFF8000_RAMStart;
+  
+  
   text_end = ORIGIN(m_text) + LENGTH(m_text);
   ASSERT(__DATA_END <= text_end, "region m_text overflowed with text and data")
 
@@ -229,13 +242,13 @@ SECTIONS
     . += HEAP_SIZE;
     __HeapLimit = .;
     __heap_limit = .; /* Add for _sbrk */
-  } > m_data_2
+  } > m_data
 
   .stack :
   {
     . = ALIGN(8);
     . += STACK_SIZE;
-  } > m_data_2
+  } > m_data
 
   m_usb_bdt USB_RAM_START (NOLOAD) :
   {

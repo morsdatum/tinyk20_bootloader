@@ -62,7 +62,8 @@ MEMORY
   m_bootloader_config   (RX)  : ORIGIN = 0x000003C0, LENGTH = 0x00000040
   m_flash_config        (RX)  : ORIGIN = 0x00000400, LENGTH = 0x00000010
   m_text                (RX)  : ORIGIN = 0x00000410, LENGTH = 0x0001FBF0
-  m_data                (RW)  : ORIGIN = 0x1FFFA000, LENGTH = 0x00018000
+  m_data_1FFFA000       (RW)  : ORIGIN = 0x1FFFA000, LENGTH = 0x00006000
+  m_data				(RW)  : ORIGIN = 0x20000000, LENGTH = 0x00012000
   m_usb_sram            (RW)  : ORIGIN = 0x40100000, LENGTH = 0x00000800
 }
 
@@ -218,6 +219,18 @@ SECTIONS
   } > m_data
 
   __DATA_END = __DATA_ROM + (__data_end__ - __data_start__);
+  
+  __m_data_1FFFA000_ROMStart = __DATA_ROM + SIZEOF(.data);
+  .m_data_1FFFA000 : AT(__m_data_1FFFA000_ROMStart)
+  {
+     . = ALIGN(4);
+     __m_data_1FFFA000_RAMStart = .;
+     *(.m_data_1FFFA000)     /* This is an user defined section */
+     __m_data_1FFFA000_RAMEnd = .;
+     . = ALIGN(4);
+  } > m_data_1FFFA000
+  __m_data_1FFFA000_ROMSize = __m_data_1FFFA000_RAMEnd - __m_data_1FFFA000_RAMStart;  
+  
   text_end = ORIGIN(m_text) + LENGTH(m_text);
   ASSERT(__DATA_END <= text_end, "region m_text overflowed with text and data")
 
